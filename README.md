@@ -1,43 +1,64 @@
 # echo-app-sbt
 
-A minimal Scala 3 console application created using **sbt**, as part of the [DIBS](https://dibs.pages.dev/) course (Design and Implementation of Software Libraries).
+A modular Scala 3 application built with **sbt**, developed as part of the [DIBS](https://dibs.pages.dev/) course (*Diseño e Implementación de Bibliotecas de Software*).
 
-This project serves as a starting point to explore the basics of project structure, build tooling, and compilation using `sbt`, the most widely used build tool in the Scala ecosystem.
+This project demonstrates the evolution of a basic Scala console application into a **multi-module architecture**, separating a reusable library (`lib`) from the main executable application (`app`). It's ideal for exploring best practices in modularization, dependency management, and scalable project structure with sbt.
 
 > 🗣 Although the course materials are in Spanish, this repository and its code are written in English to make the project more accessible to a wider audience.
 
-## 📚 About this Lesson
+## 📚 About the Lessons
 
-This project accompanies the following lesson:  
-👉 [Creating a Basic Project with sbt](https://dibs.pages.dev/docs/build-systems/init/sbt/)
+This repository supports two lessons from the DIBS course:
 
-The goal of the lesson is to:
+### ✅ [Creating a Basic Project with sbt](https://dibs.pages.dev/docs/build-systems/init/sbt/)
 
-- Introduce `sbt` and how to install it.
-- Generate a new Scala 3 project using the official Giter8 template.
-- Understand the generated project structure.
-- Write and run a simple program using the `@main` entry point annotation in Scala 3.
+- Learn how to install and use `sbt`
+- Generate a basic Scala 3 project using the official Giter8 template
+- Understand the standard `src/main` and `src/test` directory structure
+- Run a small console app using Scala 3's `@main` annotation
 
-The project includes a single `Main.scala` file with a short line inspired by *Gyo*, a horror manga by Junji Ito:
+### 🧱 [Structuring Multi-Module Projects with sbt](https://dibs.pages.dev/docs/build-systems/modular-design/sbt/)
 
-```scala
-@main def main(): Unit =
-    println("The smell... it's coming from the sea.")
-```
+- Convert the basic project into a multi-module layout
+- Define `lib` and `app` subprojects in `build.sbt`
+- Share settings across modules with `commonSettings`
+- Call a function defined in the library from the main application
 
-## 🚀 Running the App
+## 🚀 Running the Application
 
-Make sure you have [sbt](https://www.scala-sbt.org/) installed, then from the root of the project run:
+From the root of the project, you can run the main module with:
 
 ```bash
-sbt run
+sbt "app/run Alex Dim Nah Dim"
 ```
 
-You should see output similar to:
+Expected output:
 
 ```plaintext
-[info] running 'main'
-The smell... it's coming from the sea.
+Alex
+Dim
+Nah
+Dim
+```
+
+## 📁 Project Structure
+
+```
+echo-app-sbt/
+├── build.sbt               # Defines common settings and declares modules
+├── project/
+│   └── build.properties    # sbt version
+├── lib/                    # Reusable library module
+│   └── src/
+│       └── main/
+│           └── scala/
+│               └── cl/ravenhill/echo/echoMessage.scala
+├── app/                    # Application module
+│   └── src/
+│       └── main/
+│           └── scala/
+│               └── cl/ravenhill/echo/app.scala
+└── README.md
 ```
 
 ## 🛠️ Requirements
@@ -45,24 +66,6 @@ The smell... it's coming from the sea.
 - Scala 3.x
 - sbt 1.10+
 - Java 17 or later (tested with Java 23)
-
-## 📂 Project Structure
-
-```
-.
-├── .gitignore
-├── README.md
-├── build.sbt
-├── project/
-│   └── build.properties
-└── src/
-    ├── main/
-    │   └── scala/
-    │       └── Main.scala
-    └── test/
-        └── scala/
-            └── MySuite.scala
-```
 
 ## 🎓 Part of the DIBS Course
 
