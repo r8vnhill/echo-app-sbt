@@ -200,7 +200,7 @@ Prompts for confirmation before each action (creating a directory or file).
 None. Side effects include creation of directories and files.
 #>
 function Initialize-ScalaModules {
-    [CmdletBinding(SupportsShouldProcess = $true)]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [string[]]$BasePackage   = @('com','github','username'),
         [string[]]$AppPackage    = @('app'),
