@@ -14,8 +14,8 @@ initialize_scala_modules() {
 
   # 🔧 Defaults
   local base_package=("com" "github" "username")
-  local app_package=("app")
-  local lib_package=("lib")
+  local app_package=("")
+  local lib_package=("")
   local app_file_name="App.scala"
   local lib_file_name="Lib.scala"
 
@@ -86,42 +86,45 @@ EOF
   done
 
   # 🔧 Helpers
-  join_path() {
+  get_package_path() {
     local IFS="/"
     echo "$*"
   }
 
-  get_package_path() {
-    local parts=("$@")
-    join_path "${parts[@]}"
+  create_scala_item() {
+    local action="$1"         # e.g., mkdir or touch
+    local action_arg="$2"     # e.g., -p or empty
+    local file_path="$3"
+    local label="$4"
+    local emoji="$5"
+    local name="${6:-$file_path}"
+
+    $verbose && echo -e "${BLUE}${emoji} Creating $label: $name${RESET}"
+
+    if $what_if; then
+      echo -e "${YELLOW}🔍 WhatIf: $action${action_arg:+ $action_arg} '$file_path'${RESET}"
+      return
+    fi
+
+    if $confirm; then
+      echo -ne "${CYAN}Create $label '$file_path'? [y/N] ${RESET}"
+      read -r reply
+      [[ "$reply" =~ ^[Yy]$ ]] || return
+    fi
+
+    if [[ -n "$action_arg" ]]; then
+      "$action" "$action_arg" "$file_path"
+    else
+      "$action" "$file_path"
+    fi
   }
 
   new_scala_directory() {
-    local path="$1"
-    local description="$2"
-    $verbose && echo -e "${BLUE}📁 Creating $description: $path${RESET}"
-    if $what_if; then
-      echo -e "${YELLOW}🔍 WhatIf: /bin/mkdir -p '$path'${RESET}"
-    elif $confirm; then
-      read -rp "$(echo -e "${CYAN}Create directory '$path'? [y/N] ${RESET}")" reply
-      [[ "$reply" =~ ^[Yy]$ ]] && /bin/mkdir -p "$path"
-    else
-      /bin/mkdir -p "$path"
-    fi
+    create_scala_item "mkdir" "-p" "$1" "directory" "📁"
   }
 
   new_scala_file() {
-    local path="$1"
-    local name="$2"
-    $verbose && echo -e "${BLUE}📄 Creating file: $name${RESET}"
-    if $what_if; then
-      echo -e "${YELLOW}🔍 WhatIf: /bin/touch '$path'${RESET}"
-    elif $confirm; then
-      read -rp "$(echo -e "${CYAN}Create file '$name'? [y/N] ${RESET}")" reply
-      [[ "$reply" =~ ^[Yy]$ ]] && /bin/touch "$path"
-    else
-      /bin/touch "$path"
-    fi
+    create_scala_item "touch" "" "$1" "file" "📄" "$2"
   }
 
   # 🧱 Paths
